@@ -1,11 +1,11 @@
 {
   "name": "Editor Preview Position",
   "component": true,
-  "authors": "Alteras",
-  "about_url": "https://github.com/Alteras1/discourse-editor-preview-position",
-  "license_url": "https://github.com/Alteras1/discourse-editor-preview-position/blob/main/LICENSE",
+  "authors": "Alteras, godofrefuse",
+  "about_url": "https://github.com/godofrefuse/discourse-editor-preview-position",
+  "license_url": "https://github.com/godofrefuse/discourse-editor-preview-position/blob/main/LICENSE",
   "learn_more": "Add a dropdown in the composer that let's users choose where the preview is positioned. Only works in desktop view.",
-  "theme_version": "1.0.5",
+  "theme_version": "1.0.6",
   "minimum_discourse_version": "3.2.0.beta2",
   "maximum_discourse_version": null,
   "assets": {
