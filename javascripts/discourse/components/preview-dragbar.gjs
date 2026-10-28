@@ -31,6 +31,27 @@ function mouseXPos(e) {
   return e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX);
 }
 
+/**
+ * Switch the preview between the user's dragged size and the default even split.
+ * The flex variable drives the classic flexbox composer; the body class drives
+ * the grid layout used by the composer redesign.
+ * @param {boolean} resized
+ */
+function setPreviewResized(resized) {
+  if (resized) {
+    document.documentElement.style.setProperty(
+      "--composer-preview-flex",
+      "none"
+    );
+    document.body.classList.add("composer-preview-resized");
+    localStorage.setItem("composerPreviewFlex", "none");
+  } else {
+    document.documentElement.style.setProperty("--composer-preview-flex", "");
+    document.body.classList.remove("composer-preview-resized");
+    localStorage.removeItem("composerPreviewFlex");
+  }
+}
+
 export default class PreviewDragbar extends Component {
   @service composer;
   @service site;
@@ -44,10 +65,7 @@ export default class PreviewDragbar extends Component {
     super(...arguments);
     const flex = localStorage.getItem("composerPreviewFlex");
     if (flex) {
-      document.documentElement.style.setProperty(
-        "--composer-preview-flex",
-        "none"
-      );
+      setPreviewResized(true);
     }
     const width = localStorage.getItem("composerPreviewWidth");
     if (width) {
@@ -83,13 +101,9 @@ export default class PreviewDragbar extends Component {
         "--composer-preview-width",
         `${pointerRelativeXpos}px`
       );
-      document.documentElement.style.setProperty(
-        "--composer-preview-flex",
-        "none"
-      );
+      setPreviewResized(true);
       // save the height/width for future sessions
       localStorage.setItem("composerPreviewWidth", `${pointerRelativeXpos}px`);
-      localStorage.setItem("composerPreviewFlex", "none");
     }
 
     if (this.verticalDragging) {
@@ -104,12 +118,8 @@ export default class PreviewDragbar extends Component {
         "--composer-preview-height",
         `${pointerRelativeXpos}px`
       );
-      document.documentElement.style.setProperty(
-        "--composer-preview-flex",
-        "none"
-      );
+      setPreviewResized(true);
       localStorage.setItem("composerPreviewHeight", `${pointerRelativeXpos}px`);
-      localStorage.setItem("composerPreviewFlex", "none");
     }
   }
 
@@ -199,20 +209,9 @@ export default class PreviewDragbar extends Component {
 
   @action
   doubleClick() {
-    if (
-      document.documentElement.style.getPropertyValue(
-        "--composer-preview-flex"
-      ) === "none"
-    ) {
-      document.documentElement.style.setProperty("--composer-preview-flex", "");
-      localStorage.removeItem("composerPreviewFlex");
-    } else {
-      document.documentElement.style.setProperty(
-        "--composer-preview-flex",
-        "none"
-      );
-      localStorage.setItem("composerPreviewFlex", "none");
-    }
+    setPreviewResized(
+      !document.body.classList.contains("composer-preview-resized")
+    );
   }
 
   <template>

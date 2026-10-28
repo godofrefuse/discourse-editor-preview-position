@@ -313,3 +313,104 @@
     }
   }
 }
+
+// The composer redesign (enable_composer_redesign upcoming change) lays the
+// editor out as a grid, so flex-direction and the preview's own width/height
+// no longer position or size it. Rebuild each position as grid tracks instead.
+// Revisit these selectors once core promotes the change and drops the uc- class.
+.uc-enable-composer-redesign #reply-control .d-editor-container {
+  // the redesign separates editor and preview with a border, not a gap
+  gap: 0;
+}
+
+.uc-enable-composer-redesign
+  #reply-control.show-preview
+  .d-editor-container.--markdown-editor-enabled
+  .d-editor-preview-wrapper {
+  // the grid track sizes the preview
+  width: auto;
+  height: auto;
+}
+
+.uc-enable-composer-redesign.composer-preview-left
+  #reply-control.show-preview
+  .d-editor-container.--markdown-editor-enabled {
+  grid-template-areas:
+    "fields fields"
+    "preview editor";
+
+  .d-editor-preview-wrapper {
+    border-left: 0;
+    border-right: 1px solid var(--primary-low);
+  }
+}
+
+.uc-enable-composer-redesign.composer-preview-top
+  #reply-control.show-preview
+  .d-editor-container.--markdown-editor-enabled {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: min-content minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "fields"
+    "preview"
+    "editor";
+
+  .d-editor-preview-wrapper {
+    border-left: 0;
+    border-bottom: 1px solid var(--primary-low);
+  }
+}
+
+.uc-enable-composer-redesign.composer-preview-bottom
+  #reply-control.show-preview
+  .d-editor-container.--markdown-editor-enabled {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: min-content minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "fields"
+    "editor"
+    "preview";
+
+  .d-editor-preview-wrapper {
+    border-left: 0;
+    border-top: 1px solid var(--primary-low);
+  }
+}
+
+@if $allow_resizable_horizontal_previews == "true" {
+  .uc-enable-composer-redesign.composer-preview-resized.composer-preview-right
+    #reply-control.show-preview
+    .d-editor-container.--markdown-editor-enabled {
+    grid-template-columns:
+      minmax(0, 1fr)
+      clamp(15%, var(--composer-preview-width, 50%), 85%);
+  }
+
+  .uc-enable-composer-redesign.composer-preview-resized.composer-preview-left
+    #reply-control.show-preview
+    .d-editor-container.--markdown-editor-enabled {
+    grid-template-columns:
+      clamp(15%, var(--composer-preview-width, 50%), 85%)
+      minmax(0, 1fr);
+  }
+}
+
+@if $allow_resizable_vertical_previews == "true" {
+  .uc-enable-composer-redesign.composer-preview-resized.composer-preview-top
+    #reply-control.show-preview
+    .d-editor-container.--markdown-editor-enabled {
+    grid-template-rows:
+      min-content
+      clamp(15%, var(--composer-preview-height, 50%), 85%)
+      minmax(0, 1fr);
+  }
+
+  .uc-enable-composer-redesign.composer-preview-resized.composer-preview-bottom
+    #reply-control.show-preview
+    .d-editor-container.--markdown-editor-enabled {
+    grid-template-rows:
+      min-content
+      minmax(0, 1fr)
+      clamp(15%, var(--composer-preview-height, 50%), 85%);
+  }
+}
